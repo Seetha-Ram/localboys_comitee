@@ -1,0 +1,2838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#ff6b00"
+  >
+
+  <title>Local Boys Chanda</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background: #f5f6f8;
+      color: #222;
+    }
+
+    /* =========================================
+       HEADER
+    ========================================= */
+
+    header {
+      background:
+        linear-gradient(
+          135deg,
+          #ff6b00,
+          #ff9800
+        );
+
+      color: white;
+
+      padding: 24px 20px;
+
+      text-align: center;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.12);
+    }
+
+    header h1 {
+      margin: 0;
+
+      font-size: 30px;
+
+      font-weight: 800;
+    }
+
+    header p {
+      margin: 7px 0 0;
+
+      font-size: 15px;
+
+      opacity: 0.92;
+    }
+
+    /* =========================================
+       MAIN
+    ========================================= */
+
+    .container {
+      max-width: 1150px;
+
+      margin: 0 auto;
+
+      padding: 22px;
+    }
+
+    /* =========================================
+       HOME MENU
+    ========================================= */
+
+    .home-buttons {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 18px;
+
+      margin-bottom: 28px;
+    }
+
+    .home-button {
+      border: none;
+
+      border-radius: 18px;
+
+      padding: 28px 20px;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 21px;
+
+      font-weight: 700;
+
+      box-shadow:
+        0 6px 18px
+        rgba(0, 0, 0, 0.12);
+
+      transition:
+        transform 0.15s,
+        box-shadow 0.15s;
+    }
+
+    .home-button:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 9px 22px
+        rgba(0, 0, 0, 0.15);
+    }
+
+    .chanda-button {
+      background:
+        linear-gradient(
+          135deg,
+          #ff6b00,
+          #ff9800
+        );
+    }
+
+    .expense-button {
+      background:
+        linear-gradient(
+          135deg,
+          #1565c0,
+          #2196f3
+        );
+    }
+
+    .button-icon {
+      display: block;
+
+      font-size: 38px;
+
+      margin-bottom: 8px;
+    }
+
+    /* =========================================
+       SECTIONS
+    ========================================= */
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-title {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 18px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+
+      font-size: 24px;
+    }
+
+    .back-button {
+      border: none;
+
+      background: #333;
+
+      color: white;
+
+      padding: 10px 16px;
+
+      border-radius: 9px;
+
+      cursor: pointer;
+
+      font-weight: 600;
+    }
+
+    /* =========================================
+       DASHBOARD CARDS
+    ========================================= */
+
+    .dashboard-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 16px;
+
+      margin-bottom: 22px;
+    }
+
+    .dashboard-card {
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 20px;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.07);
+    }
+
+    .dashboard-card h3 {
+      margin: 0;
+
+      color: #666;
+
+      font-size: 14px;
+
+      font-weight: 600;
+    }
+
+    .dashboard-amount {
+      margin-top: 10px;
+
+      font-size: 29px;
+
+      font-weight: 800;
+    }
+
+    .green {
+      color: #159447;
+    }
+
+    .red {
+      color: #d93025;
+    }
+
+    .blue {
+      color: #1976d2;
+    }
+
+    /* =========================================
+       FILTERS
+    ========================================= */
+
+    .filter-box {
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 18px;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.07);
+    }
+
+    .filter-box h3 {
+      margin-top: 0;
+    }
+
+    .filter-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 12px;
+    }
+
+    .filter-grid label {
+      display: block;
+
+      font-size: 13px;
+
+      color: #666;
+
+      margin-bottom: 5px;
+    }
+
+    /* =========================================
+       CATEGORY CARDS
+    ========================================= */
+
+    .summary-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 18px;
+
+      margin-bottom: 25px;
+    }
+
+    .summary-card {
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 20px;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.07);
+    }
+
+    .summary-card h2 {
+      margin-top: 0;
+
+      font-size: 19px;
+    }
+
+    .category-row {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 13px 0;
+
+      border-bottom:
+        1px solid #eeeeee;
+    }
+
+    .category-row:last-child {
+      border-bottom: none;
+    }
+
+    .category-name {
+      color: #555;
+
+      font-weight: 500;
+    }
+
+    .category-total {
+      font-weight: 800;
+    }
+
+    /* =========================================
+       FORM
+    ========================================= */
+
+    .form-card {
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 20px;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.07);
+    }
+
+    .form-card h2 {
+      margin-top: 0;
+
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 12px;
+    }
+
+    .field label {
+      display: block;
+
+      margin-bottom: 6px;
+
+      font-size: 13px;
+
+      color: #555;
+
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+
+      padding: 12px;
+
+      border:
+        1px solid #d8dce1;
+
+      border-radius: 9px;
+
+      font-size: 15px;
+
+      outline: none;
+
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #ff6b00;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(255, 107, 0, 0.1);
+    }
+
+    .form-buttons {
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 16px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      border: none;
+
+      padding: 12px 18px;
+
+      border-radius: 9px;
+
+      cursor: pointer;
+
+      font-weight: 700;
+    }
+
+    .primary-button {
+      background: #ff6b00;
+
+      color: white;
+    }
+
+    .secondary-button {
+      background: #e9ecef;
+
+      color: #333;
+    }
+
+    .primary-button:hover {
+      background: #e85f00;
+    }
+
+    /* =========================================
+       TABLE
+    ========================================= */
+
+    .table-card {
+      background: white;
+
+      border-radius: 16px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.07);
+    }
+
+    .table-header {
+      padding: 18px 20px;
+
+      border-bottom:
+        1px solid #eeeeee;
+
+      font-size: 18px;
+
+      font-weight: 700;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+
+      border-collapse: collapse;
+
+      min-width: 700px;
+    }
+
+    th {
+      background: #f6f7f8;
+
+      padding: 13px 15px;
+
+      text-align: left;
+
+      font-size: 13px;
+
+      color: #555;
+
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 13px 15px;
+
+      border-top:
+        1px solid #eeeeee;
+
+      font-size: 14px;
+    }
+
+    .amount-cell {
+      font-weight: 700;
+    }
+
+    .action-button {
+      border: none;
+
+      padding: 7px 10px;
+
+      border-radius: 7px;
+
+      cursor: pointer;
+
+      margin-right: 4px;
+
+      font-size: 12px;
+
+      font-weight: 700;
+    }
+
+    .edit-button {
+      background: #1976d2;
+
+      color: white;
+    }
+
+    .delete-button {
+      background: #d93025;
+
+      color: white;
+    }
+
+    /* =========================================
+       EMPTY / LOADING
+    ========================================= */
+
+    .empty {
+      text-align: center;
+
+      padding: 30px;
+
+      color: #888;
+    }
+
+    .loading {
+      text-align: center;
+
+      padding: 25px;
+
+      color: #777;
+    }
+
+    /* =========================================
+       TOAST
+    ========================================= */
+
+    .toast {
+      position: fixed;
+
+      left: 50%;
+
+      bottom: 25px;
+
+      transform:
+        translateX(-50%)
+        translateY(100px);
+
+      background: #222;
+
+      color: white;
+
+      padding: 13px 20px;
+
+      border-radius: 10px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transition:
+        all 0.25s;
+
+      z-index: 9999;
+
+      max-width: 90%;
+
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    .toast.success {
+      background: #159447;
+    }
+
+    .toast.error {
+      background: #d93025;
+    }
+
+    /* =========================================
+       MOBILE
+    ========================================= */
+
+    @media (max-width: 800px) {
+
+      .container {
+        padding: 15px;
+      }
+
+      header h1 {
+        font-size: 25px;
+      }
+
+      .home-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        align-items: flex-start;
+
+        flex-direction: column;
+      }
+
+      .form-buttons {
+        flex-direction: column;
+      }
+
+      .primary-button,
+      .secondary-button {
+        width: 100%;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+  <h1>🙏 Local Boys Chanda</h1>
+
+  <p>
+    Chanda & Expense Tracker
+  </p>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     HOME / DASHBOARD
+===================================================== -->
+
+<div
+  id="homeSection"
+  class="section active"
+>
+
+  <div class="section-title">
+
+    <h2>
+      📊 Dashboard
+    </h2>
+
+  </div>
+
+
+  <!-- HOME BUTTONS -->
+
+  <div class="home-buttons">
+
+    <button
+      class="home-button chanda-button"
+      onclick="showSection('chandaSection')"
+    >
+
+      <span class="button-icon">
+        💰
+      </span>
+
+      Chanda
+
+    </button>
+
+
+    <button
+      class="home-button expense-button"
+      onclick="showSection('expenseSection')"
+    >
+
+      <span class="button-icon">
+        💸
+      </span>
+
+      Expenses
+
+    </button>
+
+  </div>
+
+
+  <!-- DASHBOARD TOTALS -->
+
+  <div class="dashboard-grid">
+
+    <div class="dashboard-card">
+
+      <h3>
+        Total Chanda Collected
+      </h3>
+
+      <div
+        id="totalChanda"
+        class="dashboard-amount green"
+      >
+        ₹0.00
+      </div>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+      <h3>
+        Total Expenses
+      </h3>
+
+      <div
+        id="totalExpenses"
+        class="dashboard-amount red"
+      >
+        ₹0.00
+      </div>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+      <h3>
+        Remaining Balance
+      </h3>
+
+      <div
+        id="balance"
+        class="dashboard-amount blue"
+      >
+        ₹0.00
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- FILTER -->
+
+  <div class="filter-box">
+
+    <h3>
+      🔎 Dashboard Filter
+    </h3>
+
+    <div class="filter-grid">
+
+      <div>
+
+        <label>
+          Category
+        </label>
+
+        <select
+          id="dashboardCategory"
+          onchange="applyDashboardFilter()"
+        >
+
+          <option value="ALL">
+            All Categories
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div>
+
+        <label>
+          From Date
+        </label>
+
+        <input
+          type="date"
+          id="dashboardFromDate"
+          onchange="applyDashboardFilter()"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          To Date
+        </label>
+
+        <input
+          type="date"
+          id="dashboardToDate"
+          onchange="applyDashboardFilter()"
+        >
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- CATEGORY SUMMARIES -->
+
+  <div class="summary-grid">
+
+
+    <!-- CHANDA CATEGORY -->
+
+    <div class="summary-card">
+
+      <h2>
+        💰 Chanda By Category
+      </h2>
+
+      <div id="chandaCategories">
+
+        <div class="loading">
+          Loading...
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- EXPENSE CATEGORY -->
+
+    <div class="summary-card">
+
+      <h2>
+        💸 Expenses By Category
+      </h2>
+
+      <div id="expenseCategories">
+
+        <div class="loading">
+          Loading...
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     CHANDA SECTION
+===================================================== -->
+
+<div
+  id="chandaSection"
+  class="section"
+>
+
+  <div class="section-title">
+
+    <h2>
+      💰 Chanda
+    </h2>
+
+    <button
+      class="back-button"
+      onclick="showSection('homeSection')"
+    >
+      ← Dashboard
+    </button>
+
+  </div>
+
+
+  <!-- CHANDA FORM -->
+
+  <div class="form-card">
+
+    <h2 id="chandaFormTitle">
+      Add Chanda
+    </h2>
+
+    <input
+      type="hidden"
+      id="chandaId"
+    >
+
+
+    <div class="form-grid">
+
+
+      <div class="field">
+
+        <label>
+          Date
+        </label>
+
+        <input
+          type="date"
+          id="chandaDate"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Devotee Name
+        </label>
+
+        <input
+          type="text"
+          id="devoteeName"
+          placeholder="Enter devotee name"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Amount
+        </label>
+
+        <input
+          type="number"
+          id="chandaAmount"
+          placeholder="Enter amount"
+          min="0"
+          step="0.01"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Category
+        </label>
+
+        <select id="chandaCategory">
+
+          <option value="">
+            Select category
+          </option>
+
+          <option value="Committee">
+            Committee
+          </option>
+
+          <option value="Local Devotee">
+            Local Devotee
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-buttons">
+
+      <button
+        id="chandaSaveButton"
+        class="primary-button"
+        onclick="saveChanda()"
+      >
+        Add Chanda
+      </button>
+
+      <button
+        class="secondary-button"
+        onclick="clearChandaForm()"
+      >
+        Clear
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- CHANDA TABLE -->
+
+  <div class="table-card">
+
+    <div class="table-header">
+      Chanda Records
+    </div>
+
+    <div class="table-scroll">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Devotee Name
+            </th>
+
+            <th>
+              Amount
+            </th>
+
+            <th>
+              Category
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="chandaTable">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     EXPENSE SECTION
+===================================================== -->
+
+<div
+  id="expenseSection"
+  class="section"
+>
+
+  <div class="section-title">
+
+    <h2>
+      💸 Expenses
+    </h2>
+
+    <button
+      class="back-button"
+      onclick="showSection('homeSection')"
+    >
+      ← Dashboard
+    </button>
+
+  </div>
+
+
+  <!-- EXPENSE FORM -->
+
+  <div class="form-card">
+
+    <h2 id="expenseFormTitle">
+      Add Expense
+    </h2>
+
+    <input
+      type="hidden"
+      id="expenseId"
+    >
+
+
+    <div class="form-grid">
+
+
+      <div class="field">
+
+        <label>
+          Date
+        </label>
+
+        <input
+          type="date"
+          id="expenseDate"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Expense Name
+        </label>
+
+        <input
+          type="text"
+          id="expenseName"
+          placeholder="Example: Decoration"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Amount
+        </label>
+
+        <input
+          type="number"
+          id="expenseAmount"
+          placeholder="Enter amount"
+          min="0"
+          step="0.01"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Category
+        </label>
+
+        <select id="expenseCategory">
+
+          <option value="">
+            Select category
+          </option>
+
+          <option value="Committee">
+            Committee
+          </option>
+
+          <option value="Local Devotee">
+            Local Devotee
+          </option>
+
+          <option value="Decoration">
+            Decoration
+          </option>
+
+          <option value="Food">
+            Food
+          </option>
+
+          <option value="Pooja">
+            Pooja
+          </option>
+
+          <option value="Transport">
+            Transport
+          </option>
+
+          <option value="Other">
+            Other
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-buttons">
+
+      <button
+        id="expenseSaveButton"
+        class="primary-button"
+        onclick="saveExpense()"
+      >
+        Add Expense
+      </button>
+
+      <button
+        class="secondary-button"
+        onclick="clearExpenseForm()"
+      >
+        Clear
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- EXPENSE TABLE -->
+
+  <div class="table-card">
+
+    <div class="table-header">
+      Expense Records
+    </div>
+
+    <div class="table-scroll">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Expense Name
+            </th>
+
+            <th>
+              Amount
+            </th>
+
+            <th>
+              Category
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="expenseTable">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+  id="toast"
+  class="toast"
+>
+</div>
+
+
+<script>
+
+/* =====================================================
+   GLOBAL DATA
+===================================================== */
+
+let chandaData = [];
+
+let expenseData = [];
+
+let dashboardData = null;
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showSection(sectionId) {
+
+  document
+    .querySelectorAll(".section")
+    .forEach(section => {
+
+      section.classList.remove("active");
+
+    });
+
+
+  const section =
+    document.getElementById(sectionId);
+
+
+  if (section) {
+
+    section.classList.add("active");
+
+  }
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+
+  if (sectionId === "homeSection") {
+
+    loadDashboard();
+
+  }
+
+
+  if (sectionId === "chandaSection") {
+
+    loadChanda();
+
+  }
+
+
+  if (sectionId === "expenseSection") {
+
+    loadExpenses();
+
+  }
+
+}
+
+
+/* =====================================================
+   MONEY FORMAT
+===================================================== */
+
+function money(value) {
+
+  return "₹" +
+    Number(value || 0).toLocaleString(
+      "en-IN",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    );
+
+}
+
+
+/* =====================================================
+   DATE FORMAT
+===================================================== */
+
+function formatDate(dateString) {
+
+  if (!dateString) {
+    return "";
+  }
+
+  const parts =
+    String(dateString).substring(0, 10).split("-");
+
+  if (parts.length !== 3) {
+    return dateString;
+  }
+
+  return `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(message, type = "success") {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.className =
+    "toast show " + type;
+
+
+  setTimeout(() => {
+
+    toast.className =
+      "toast";
+
+  }, 2500);
+
+}
+
+
+/* =====================================================
+   CHANDA
+===================================================== */
+
+async function loadChanda() {
+
+  try {
+
+    const response =
+      await fetch("/api/chanda");
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Unable to load chanda"
+      );
+
+    }
+
+
+    chandaData =
+      await response.json();
+
+
+    renderChanda();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to load chanda records.",
+      "error"
+    );
+
+  }
+
+}
+
+
+function renderChanda() {
+
+  const table =
+    document.getElementById("chandaTable");
+
+
+  if (!chandaData.length) {
+
+    table.innerHTML = `
+      <tr>
+        <td
+          colspan="5"
+          class="empty"
+        >
+          No chanda records yet.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+
+  table.innerHTML =
+    chandaData.map(item => {
+
+      return `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(formatDate(item.date))}
+          </td>
+
+          <td>
+            ${escapeHtml(item.devotee_name)}
+          </td>
+
+          <td class="amount-cell green">
+            ${money(item.amount)}
+          </td>
+
+          <td>
+            ${escapeHtml(item.category)}
+          </td>
+
+          <td>
+
+            <button
+              class="action-button edit-button"
+              onclick="editChanda(${item.id})"
+            >
+              Edit
+            </button>
+
+            <button
+              class="action-button delete-button"
+              onclick="deleteChanda(${item.id})"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =====================================================
+   SAVE CHANDA
+===================================================== */
+
+async function saveChanda() {
+
+  const id =
+    document.getElementById("chandaId").value;
+
+
+  const data = {
+
+    date:
+      document.getElementById(
+        "chandaDate"
+      ).value,
+
+    devotee_name:
+      document.getElementById(
+        "devoteeName"
+      ).value.trim(),
+
+    amount:
+      document.getElementById(
+        "chandaAmount"
+      ).value,
+
+    category:
+      document.getElementById(
+        "chandaCategory"
+      ).value
+
+  };
+
+
+  if (
+    !data.date ||
+    !data.devotee_name ||
+    !data.amount ||
+    !data.category
+  ) {
+
+    showToast(
+      "Please fill all fields.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const url =
+      id
+        ? `/api/chanda/${id}`
+        : "/api/chanda";
+
+
+    const method =
+      id
+        ? "PUT"
+        : "POST";
+
+
+    const response =
+      await fetch(url, {
+
+        method,
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(data)
+
+      });
+
+
+    const result =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        result.error ||
+        "Unable to save chanda."
+      );
+
+    }
+
+
+    clearChandaForm();
+
+    await loadChanda();
+
+    await loadDashboard();
+
+
+    showToast(
+      id
+        ? "Chanda updated successfully!"
+        : "Chanda added successfully!"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   EDIT CHANDA
+===================================================== */
+
+function editChanda(id) {
+
+  const item =
+    chandaData.find(
+      record =>
+        Number(record.id) === Number(id)
+    );
+
+
+  if (!item) {
+    return;
+  }
+
+
+  document.getElementById(
+    "chandaId"
+  ).value = item.id;
+
+
+  document.getElementById(
+    "chandaDate"
+  ).value =
+    String(item.date).substring(0, 10);
+
+
+  document.getElementById(
+    "devoteeName"
+  ).value =
+    item.devotee_name;
+
+
+  document.getElementById(
+    "chandaAmount"
+  ).value =
+    item.amount;
+
+
+  document.getElementById(
+    "chandaCategory"
+  ).value =
+    item.category;
+
+
+  document.getElementById(
+    "chandaFormTitle"
+  ).textContent =
+    "Edit Chanda";
+
+
+  document.getElementById(
+    "chandaSaveButton"
+  ).textContent =
+    "Update Chanda";
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+/* =====================================================
+   DELETE CHANDA
+===================================================== */
+
+async function deleteChanda(id) {
+
+  const confirmed =
+    confirm(
+      "Are you sure you want to delete this chanda entry?"
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        `/api/chanda/${id}`,
+        {
+          method: "DELETE"
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        result.error ||
+        "Unable to delete."
+      );
+
+    }
+
+
+    await loadChanda();
+
+    await loadDashboard();
+
+
+    showToast(
+      "Chanda deleted successfully!"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   CLEAR CHANDA FORM
+===================================================== */
+
+function clearChandaForm() {
+
+  document.getElementById(
+    "chandaId"
+  ).value = "";
+
+
+  document.getElementById(
+    "chandaDate"
+  ).value = "";
+
+
+  document.getElementById(
+    "devoteeName"
+  ).value = "";
+
+
+  document.getElementById(
+    "chandaAmount"
+  ).value = "";
+
+
+  document.getElementById(
+    "chandaCategory"
+  ).value = "";
+
+
+  document.getElementById(
+    "chandaFormTitle"
+  ).textContent =
+    "Add Chanda";
+
+
+  document.getElementById(
+    "chandaSaveButton"
+  ).textContent =
+    "Add Chanda";
+
+}
+
+
+/* =====================================================
+   EXPENSES
+===================================================== */
+
+async function loadExpenses() {
+
+  try {
+
+    const response =
+      await fetch("/api/expenses");
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Unable to load expenses"
+      );
+
+    }
+
+
+    expenseData =
+      await response.json();
+
+
+    renderExpenses();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to load expenses.",
+      "error"
+    );
+
+  }
+
+}
+
+
+function renderExpenses() {
+
+  const table =
+    document.getElementById(
+      "expenseTable"
+    );
+
+
+  if (!expenseData.length) {
+
+    table.innerHTML = `
+      <tr>
+        <td
+          colspan="5"
+          class="empty"
+        >
+          No expense records yet.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+
+  table.innerHTML =
+    expenseData.map(item => {
+
+      return `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(formatDate(item.date))}
+          </td>
+
+          <td>
+            ${escapeHtml(item.expense_name)}
+          </td>
+
+          <td class="amount-cell red">
+            ${money(item.amount)}
+          </td>
+
+          <td>
+            ${escapeHtml(item.category)}
+          </td>
+
+          <td>
+
+            <button
+              class="action-button edit-button"
+              onclick="editExpense(${item.id})"
+            >
+              Edit
+            </button>
+
+            <button
+              class="action-button delete-button"
+              onclick="deleteExpense(${item.id})"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =====================================================
+   SAVE EXPENSE
+===================================================== */
+
+async function saveExpense() {
+
+  const id =
+    document.getElementById(
+      "expenseId"
+    ).value;
+
+
+  const data = {
+
+    date:
+      document.getElementById(
+        "expenseDate"
+      ).value,
+
+    expense_name:
+      document.getElementById(
+        "expenseName"
+      ).value.trim(),
+
+    amount:
+      document.getElementById(
+        "expenseAmount"
+      ).value,
+
+    category:
+      document.getElementById(
+        "expenseCategory"
+      ).value
+
+  };
+
+
+  if (
+    !data.date ||
+    !data.expense_name ||
+    !data.amount ||
+    !data.category
+  ) {
+
+    showToast(
+      "Please fill all fields.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const url =
+      id
+        ? `/api/expenses/${id}`
+        : "/api/expenses";
+
+
+    const method =
+      id
+        ? "PUT"
+        : "POST";
+
+
+    const response =
+      await fetch(url, {
+
+        method,
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(data)
+
+      });
+
+
+    const result =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        result.error ||
+        "Unable to save expense."
+      );
+
+    }
+
+
+    clearExpenseForm();
+
+    await loadExpenses();
+
+    await loadDashboard();
+
+
+    showToast(
+      id
+        ? "Expense updated successfully!"
+        : "Expense added successfully!"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   EDIT EXPENSE
+===================================================== */
+
+function editExpense(id) {
+
+  const item =
+    expenseData.find(
+      record =>
+        Number(record.id) === Number(id)
+    );
+
+
+  if (!item) {
+    return;
+  }
+
+
+  document.getElementById(
+    "expenseId"
+  ).value =
+    item.id;
+
+
+  document.getElementById(
+    "expenseDate"
+  ).value =
+    String(item.date).substring(0, 10);
+
+
+  document.getElementById(
+    "expenseName"
+  ).value =
+    item.expense_name;
+
+
+  document.getElementById(
+    "expenseAmount"
+  ).value =
+    item.amount;
+
+
+  document.getElementById(
+    "expenseCategory"
+  ).value =
+    item.category;
+
+
+  document.getElementById(
+    "expenseFormTitle"
+  ).textContent =
+    "Edit Expense";
+
+
+  document.getElementById(
+    "expenseSaveButton"
+  ).textContent =
+    "Update Expense";
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+/* =====================================================
+   DELETE EXPENSE
+===================================================== */
+
+async function deleteExpense(id) {
+
+  const confirmed =
+    confirm(
+      "Are you sure you want to delete this expense?"
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        `/api/expenses/${id}`,
+        {
+          method: "DELETE"
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        result.error ||
+        "Unable to delete."
+      );
+
+    }
+
+
+    await loadExpenses();
+
+    await loadDashboard();
+
+
+    showToast(
+      "Expense deleted successfully!"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   CLEAR EXPENSE FORM
+===================================================== */
+
+function clearExpenseForm() {
+
+  document.getElementById(
+    "expenseId"
+  ).value = "";
+
+
+  document.getElementById(
+    "expenseDate"
+  ).value = "";
+
+
+  document.getElementById(
+    "expenseName"
+  ).value = "";
+
+
+  document.getElementById(
+    "expenseAmount"
+  ).value = "";
+
+
+  document.getElementById(
+    "expenseCategory"
+  ).value = "";
+
+
+  document.getElementById(
+    "expenseFormTitle"
+  ).textContent =
+    "Add Expense";
+
+
+  document.getElementById(
+    "expenseSaveButton"
+  ).textContent =
+    "Add Expense";
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+async function loadDashboard() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/dashboard"
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Unable to load dashboard"
+      );
+
+    }
+
+
+    dashboardData =
+      await response.json();
+
+
+    populateDashboardCategories();
+
+    applyDashboardFilter();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to load dashboard.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   DASHBOARD CATEGORY DROPDOWN
+===================================================== */
+
+function populateDashboardCategories() {
+
+  const select =
+    document.getElementById(
+      "dashboardCategory"
+    );
+
+
+  const categories =
+    new Set();
+
+
+  if (
+    dashboardData &&
+    dashboardData.chandaByCategory
+  ) {
+
+    dashboardData.chandaByCategory
+      .forEach(item => {
+
+        categories.add(
+          item.category
+        );
+
+      });
+
+  }
+
+
+  if (
+    dashboardData &&
+    dashboardData.expensesByCategory
+  ) {
+
+    dashboardData.expensesByCategory
+      .forEach(item => {
+
+        categories.add(
+          item.category
+        );
+
+      });
+
+  }
+
+
+  const currentValue =
+    select.value;
+
+
+  select.innerHTML = `
+    <option value="ALL">
+      All Categories
+    </option>
+  `;
+
+
+  Array
+    .from(categories)
+    .sort()
+    .forEach(category => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        category;
+
+      option.textContent =
+        category;
+
+      select.appendChild(
+        option
+      );
+
+    });
+
+
+  if (
+    Array
+      .from(select.options)
+      .some(
+        option =>
+          option.value === currentValue
+      )
+  ) {
+
+    select.value =
+      currentValue;
+
+  }
+
+}
+
+
+/* =====================================================
+   DASHBOARD FILTER
+===================================================== */
+
+async function applyDashboardFilter() {
+
+  /*
+     For accurate filtering by date,
+     load the complete records and calculate
+     the dashboard values in the browser.
+  */
+
+  try {
+
+    if (
+      !chandaData.length &&
+      !expenseData.length
+    ) {
+
+      const [
+        chandaResponse,
+        expenseResponse
+      ] = await Promise.all([
+
+        fetch("/api/chanda"),
+
+        fetch("/api/expenses")
+
+      ]);
+
+
+      chandaData =
+        await chandaResponse.json();
+
+      expenseData =
+        await expenseResponse.json();
+
+    }
+
+
+    const category =
+      document.getElementById(
+        "dashboardCategory"
+      ).value;
+
+
+    const fromDate =
+      document.getElementById(
+        "dashboardFromDate"
+      ).value;
+
+
+    const toDate =
+      document.getElementById(
+        "dashboardToDate"
+      ).value;
+
+
+    const filteredChanda =
+      chandaData.filter(item => {
+
+        const date =
+          String(item.date).substring(0, 10);
+
+
+        if (
+          category !== "ALL" &&
+          item.category !== category
+        ) {
+
+          return false;
+
+        }
+
+
+        if (
+          fromDate &&
+          date < fromDate
+        ) {
+
+          return false;
+
+        }
+
+
+        if (
+          toDate &&
+          date > toDate
+        ) {
+
+          return false;
+
+        }
+
+
+        return true;
+
+      });
+
+
+    const filteredExpenses =
+      expenseData.filter(item => {
+
+        const date =
+          String(item.date).substring(0, 10);
+
+
+        if (
+          category !== "ALL" &&
+          item.category !== category
+        ) {
+
+          return false;
+
+        }
+
+
+        if (
+          fromDate &&
+          date < fromDate
+        ) {
+
+          return false;
+
+        }
+
+
+        if (
+          toDate &&
+          date > toDate
+        ) {
+
+          return false;
+
+        }
+
+
+        return true;
+
+      });
+
+
+    const totalChanda =
+      filteredChanda.reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+
+
+    const totalExpenses =
+      filteredExpenses.reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+
+
+    const balance =
+      totalChanda -
+      totalExpenses;
+
+
+    document.getElementById(
+      "totalChanda"
+    ).textContent =
+      money(totalChanda);
+
+
+    document.getElementById(
+      "totalExpenses"
+    ).textContent =
+      money(totalExpenses);
+
+
+    document.getElementById(
+      "balance"
+    ).textContent =
+      money(balance);
+
+
+    renderFilteredCategories(
+      filteredChanda,
+      filteredExpenses
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =====================================================
+   RENDER FILTERED CATEGORY TOTALS
+===================================================== */
+
+function renderFilteredCategories(
+  chanda,
+  expenses
+) {
+
+  const chandaTotals =
+    {};
+
+
+  const expenseTotals =
+    {};
+
+
+  chanda.forEach(item => {
+
+    const category =
+      item.category || "Unknown";
+
+
+    chandaTotals[category] =
+      (
+        chandaTotals[category] || 0
+      ) +
+      Number(item.amount || 0);
+
+  });
+
+
+  expenses.forEach(item => {
+
+    const category =
+      item.category || "Unknown";
+
+
+    expenseTotals[category] =
+      (
+        expenseTotals[category] || 0
+      ) +
+      Number(item.amount || 0);
+
+  });
+
+
+  renderCategoryList(
+    "chandaCategories",
+    chandaTotals,
+    "green"
+  );
+
+
+  renderCategoryList(
+    "expenseCategories",
+    expenseTotals,
+    "red"
+  );
+
+}
+
+
+/* =====================================================
+   CATEGORY LIST
+===================================================== */
+
+function renderCategoryList(
+  elementId,
+  totals,
+  colorClass
+) {
+
+  const element =
+    document.getElementById(
+      elementId
+    );
+
+
+  const categories =
+    Object.keys(totals)
+      .sort();
+
+
+  if (!categories.length) {
+
+    element.innerHTML = `
+      <div class="empty">
+        No records found.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  element.innerHTML =
+    categories.map(category => {
+
+      return `
+
+        <div class="category-row">
+
+          <span class="category-name">
+            ${escapeHtml(category)}
+          </span>
+
+          <span
+            class="category-total ${colorClass}"
+          >
+            ${money(totals[category])}
+          </span>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+async function initializeApp() {
+
+  try {
+
+    await Promise.all([
+      loadChanda(),
+      loadExpenses()
+    ]);
+
+
+    await loadDashboard();
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    initializeApp();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
