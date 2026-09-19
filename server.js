@@ -3,24 +3,20 @@ const { Pool } = require("pg");
 const path = require("path");
 
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
-/* =========================================================
-   DATABASE CONNECTION
-========================================================= */
+const DATABASE_URL = process.env.DATABASE_URL;
 
-if (!process.env.DATABASE_URL) {
-  console.error("");
-  console.error("ERROR: DATABASE_URL is not set.");
-  console.error("");
-  console.error("Windows CMD:");
-  console.error("set DATABASE_URL=your-postgresql-url");
-  console.error("");
+if (!DATABASE_URL) {
+  console.error("DATABASE_URL is not configured.");
   process.exit(1);
 }
 
+console.log("Connecting to PostgreSQL...");
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
@@ -30,16 +26,16 @@ const pool = new Pool({
    MIDDLEWARE
 ========================================================= */
 
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  express.urlencoded({
-    extended: true
-  })
-);
+/*
+   index.html is in the SAME folder as server.js
+*/
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
-// Serve frontend files
-app.use(express.static(path.join(__dirname, "public")));
 
 /* =========================================================
    DATABASE INITIALIZATION
@@ -47,83 +43,63 @@ app.use(express.static(path.join(__dirname, "public")));
 
 async function initializeDatabase() {
   try {
-    console.log("Connecting to PostgreSQL...");
-
-    await pool.query("SELECT NOW()");
-
-    console.log("PostgreSQL connected.");
-
-    /* -------------------------
-       CHANDA TABLE
-    ------------------------- */
-
     await pool.query(`
       CREATE TABLE IF NOT EXISTS chanda (
         id SERIAL PRIMARY KEY,
         date DATE NOT NULL,
-        devotee_name VARCHAR(150) NOT NULL,
-        amount NUMERIC(12,2) NOT NULL CHECK (amount >= 0),
+        devotee_name VARCHAR(255) NOT NULL,
+        amount NUMERIC(12, 2) NOT NULL CHECK (amount >= 0),
         category VARCHAR(100) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
     `);
-
-    /* -------------------------
-       EXPENSE TABLE
-    ------------------------- */
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS expenses (
         id SERIAL PRIMARY KEY,
         date DATE NOT NULL,
-        expense_name VARCHAR(150) NOT NULL,
-        amount NUMERIC(12,2) NOT NULL CHECK (amount >= 0),
+        expense_name VARCHAR(255) NOT NULL,
+        amount NUMERIC(12, 2) NOT NULL CHECK (amount >= 0),
         category VARCHAR(100) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
     `);
 
     console.log("Database tables ready.");
   } catch (error) {
-    console.error("");
-    console.error("DATABASE ERROR:");
+    console.error("\nDATABASE ERROR:");
     console.error(error.message);
-    console.error("");
     process.exit(1);
   }
 }
+
 
 /* =========================================================
    HEALTH CHECK
 ========================================================= */
 
-app.get("/api/health", async (req, res) => {
+app.get("/health", async (req, res) => {
   try {
     await pool.query("SELECT 1");
 
     res.json({
-      success: true,
-      message: "Local Boys Chanda server is running",
+      status: "ok",
       database: "connected"
     });
   } catch (error) {
-    console.error("Health check error:", error);
-
     res.status(500).json({
-      success: false,
-      message: "Database connection failed",
-      error: error.message
+      status: "error",
+      database: "disconnected"
     });
   }
 });
 
-/* =========================================================
-   CHANDA API
-========================================================= */
 
-/*
-   GET ALL CHANDA
-*/
+/* =========================================================
+   CHANDA - GET ALL
+========================================================= */
 
 app.get("/api/chanda", async (req, res) => {
   try {
@@ -133,15 +109,14 @@ app.get("/api/chanda", async (req, res) => {
         TO_CHAR(date, 'YYYY-MM-DD') AS date,
         devotee_name,
         amount,
-        category,
-        created_at
+        category
       FROM chanda
       ORDER BY date DESC, id DESC
     `);
 
     res.json(result.rows);
   } catch (error) {
-    console.error("GET /api/chanda error:", error);
+    console.error("GET CHANDA ERROR:", error.message);
 
     res.status(500).json({
       error: "Unable to load chanda records."
@@ -149,9 +124,10 @@ app.get("/api/chanda", async (req, res) => {
   }
 });
 
-/*
-   ADD CHANDA
-*/
+
+/* =========================================================
+   CHANDA - ADD
+========================================================= */
 
 app.post("/api/chanda", async (req, res) => {
   try {
@@ -170,18 +146,15 @@ app.post("/api/chanda", async (req, res) => {
       !category
     ) {
       return res.status(400).json({
-        error: "Please fill all chanda fields."
+        error: "All fields are required."
       });
     }
 
     const numericAmount = Number(amount);
 
-    if (
-      !Number.isFinite(numericAmount) ||
-      numericAmount < 0
-    ) {
+    if (!Number.isFinite(numericAmount) || numericAmount < 0) {
       return res.status(400).json({
-        error: "Amount must be a valid number."
+        error: "Amount must be a valid positive number."
       });
     }
 
@@ -196,24 +169,19 @@ app.post("/api/chanda", async (req, res) => {
         TO_CHAR(date, 'YYYY-MM-DD') AS date,
         devotee_name,
         amount,
-        category,
-        created_at
+        category
       `,
       [
         date,
-        String(devotee_name).trim(),
+        devotee_name.trim(),
         numericAmount,
-        String(category).trim()
+        category
       ]
     );
 
-    res.status(201).json({
-      success: true,
-      message: "Chanda added successfully.",
-      data: result.rows[0]
-    });
+    res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error("POST /api/chanda error:", error);
+    console.error("ADD CHANDA ERROR:", error.message);
 
     res.status(500).json({
       error: "Unable to add chanda."
@@ -221,9 +189,10 @@ app.post("/api/chanda", async (req, res) => {
   }
 });
 
-/*
-   UPDATE CHANDA
-*/
+
+/* =========================================================
+   CHANDA - UPDATE
+========================================================= */
 
 app.put("/api/chanda/:id", async (req, res) => {
   try {
@@ -250,18 +219,15 @@ app.put("/api/chanda/:id", async (req, res) => {
       !category
     ) {
       return res.status(400).json({
-        error: "Please fill all chanda fields."
+        error: "All fields are required."
       });
     }
 
     const numericAmount = Number(amount);
 
-    if (
-      !Number.isFinite(numericAmount) ||
-      numericAmount < 0
-    ) {
+    if (!Number.isFinite(numericAmount) || numericAmount < 0) {
       return res.status(400).json({
-        error: "Amount must be a valid number."
+        error: "Amount must be a valid positive number."
       });
     }
 
@@ -272,21 +238,21 @@ app.put("/api/chanda/:id", async (req, res) => {
         date = $1,
         devotee_name = $2,
         amount = $3,
-        category = $4
+        category = $4,
+        updated_at = CURRENT_TIMESTAMP
       WHERE id = $5
       RETURNING
         id,
         TO_CHAR(date, 'YYYY-MM-DD') AS date,
         devotee_name,
         amount,
-        category,
-        created_at
+        category
       `,
       [
         date,
-        String(devotee_name).trim(),
+        devotee_name.trim(),
         numericAmount,
-        String(category).trim(),
+        category,
         id
       ]
     );
@@ -297,13 +263,9 @@ app.put("/api/chanda/:id", async (req, res) => {
       });
     }
 
-    res.json({
-      success: true,
-      message: "Chanda updated successfully.",
-      data: result.rows[0]
-    });
+    res.json(result.rows[0]);
   } catch (error) {
-    console.error("PUT /api/chanda error:", error);
+    console.error("UPDATE CHANDA ERROR:", error.message);
 
     res.status(500).json({
       error: "Unable to update chanda."
@@ -311,9 +273,10 @@ app.put("/api/chanda/:id", async (req, res) => {
   }
 });
 
-/*
-   DELETE CHANDA
-*/
+
+/* =========================================================
+   CHANDA - DELETE
+========================================================= */
 
 app.delete("/api/chanda/:id", async (req, res) => {
   try {
@@ -345,7 +308,7 @@ app.delete("/api/chanda/:id", async (req, res) => {
       message: "Chanda deleted successfully."
     });
   } catch (error) {
-    console.error("DELETE /api/chanda error:", error);
+    console.error("DELETE CHANDA ERROR:", error.message);
 
     res.status(500).json({
       error: "Unable to delete chanda."
@@ -353,13 +316,10 @@ app.delete("/api/chanda/:id", async (req, res) => {
   }
 });
 
-/* =========================================================
-   EXPENSE API
-========================================================= */
 
-/*
-   GET ALL EXPENSES
-*/
+/* =========================================================
+   EXPENSES - GET ALL
+========================================================= */
 
 app.get("/api/expenses", async (req, res) => {
   try {
@@ -369,25 +329,25 @@ app.get("/api/expenses", async (req, res) => {
         TO_CHAR(date, 'YYYY-MM-DD') AS date,
         expense_name,
         amount,
-        category,
-        created_at
+        category
       FROM expenses
       ORDER BY date DESC, id DESC
     `);
 
     res.json(result.rows);
   } catch (error) {
-    console.error("GET /api/expenses error:", error);
+    console.error("GET EXPENSES ERROR:", error.message);
 
     res.status(500).json({
-      error: "Unable to load expenses."
+      error: "Unable to load expense records."
     });
   }
 });
 
-/*
-   ADD EXPENSE
-*/
+
+/* =========================================================
+   EXPENSE - ADD
+========================================================= */
 
 app.post("/api/expenses", async (req, res) => {
   try {
@@ -406,18 +366,15 @@ app.post("/api/expenses", async (req, res) => {
       !category
     ) {
       return res.status(400).json({
-        error: "Please fill all expense fields."
+        error: "All fields are required."
       });
     }
 
     const numericAmount = Number(amount);
 
-    if (
-      !Number.isFinite(numericAmount) ||
-      numericAmount < 0
-    ) {
+    if (!Number.isFinite(numericAmount) || numericAmount < 0) {
       return res.status(400).json({
-        error: "Amount must be a valid number."
+        error: "Amount must be a valid positive number."
       });
     }
 
@@ -432,24 +389,19 @@ app.post("/api/expenses", async (req, res) => {
         TO_CHAR(date, 'YYYY-MM-DD') AS date,
         expense_name,
         amount,
-        category,
-        created_at
+        category
       `,
       [
         date,
-        String(expense_name).trim(),
+        expense_name.trim(),
         numericAmount,
-        String(category).trim()
+        category
       ]
     );
 
-    res.status(201).json({
-      success: true,
-      message: "Expense added successfully.",
-      data: result.rows[0]
-    });
+    res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error("POST /api/expenses error:", error);
+    console.error("ADD EXPENSE ERROR:", error.message);
 
     res.status(500).json({
       error: "Unable to add expense."
@@ -457,9 +409,10 @@ app.post("/api/expenses", async (req, res) => {
   }
 });
 
-/*
-   UPDATE EXPENSE
-*/
+
+/* =========================================================
+   EXPENSE - UPDATE
+========================================================= */
 
 app.put("/api/expenses/:id", async (req, res) => {
   try {
@@ -486,18 +439,15 @@ app.put("/api/expenses/:id", async (req, res) => {
       !category
     ) {
       return res.status(400).json({
-        error: "Please fill all expense fields."
+        error: "All fields are required."
       });
     }
 
     const numericAmount = Number(amount);
 
-    if (
-      !Number.isFinite(numericAmount) ||
-      numericAmount < 0
-    ) {
+    if (!Number.isFinite(numericAmount) || numericAmount < 0) {
       return res.status(400).json({
-        error: "Amount must be a valid number."
+        error: "Amount must be a valid positive number."
       });
     }
 
@@ -508,21 +458,21 @@ app.put("/api/expenses/:id", async (req, res) => {
         date = $1,
         expense_name = $2,
         amount = $3,
-        category = $4
+        category = $4,
+        updated_at = CURRENT_TIMESTAMP
       WHERE id = $5
       RETURNING
         id,
         TO_CHAR(date, 'YYYY-MM-DD') AS date,
         expense_name,
         amount,
-        category,
-        created_at
+        category
       `,
       [
         date,
-        String(expense_name).trim(),
+        expense_name.trim(),
         numericAmount,
-        String(category).trim(),
+        category,
         id
       ]
     );
@@ -533,13 +483,9 @@ app.put("/api/expenses/:id", async (req, res) => {
       });
     }
 
-    res.json({
-      success: true,
-      message: "Expense updated successfully.",
-      data: result.rows[0]
-    });
+    res.json(result.rows[0]);
   } catch (error) {
-    console.error("PUT /api/expenses error:", error);
+    console.error("UPDATE EXPENSE ERROR:", error.message);
 
     res.status(500).json({
       error: "Unable to update expense."
@@ -547,9 +493,10 @@ app.put("/api/expenses/:id", async (req, res) => {
   }
 });
 
-/*
-   DELETE EXPENSE
-*/
+
+/* =========================================================
+   EXPENSE - DELETE
+========================================================= */
 
 app.delete("/api/expenses/:id", async (req, res) => {
   try {
@@ -581,7 +528,7 @@ app.delete("/api/expenses/:id", async (req, res) => {
       message: "Expense deleted successfully."
     });
   } catch (error) {
-    console.error("DELETE /api/expenses error:", error);
+    console.error("DELETE EXPENSE ERROR:", error.message);
 
     res.status(500).json({
       error: "Unable to delete expense."
@@ -589,263 +536,158 @@ app.delete("/api/expenses/:id", async (req, res) => {
   }
 });
 
+
 /* =========================================================
    DASHBOARD
 ========================================================= */
 
 app.get("/api/dashboard", async (req, res) => {
   try {
-    /*
-       TOTAL CHANDA
-    */
 
-    const totalChandaResult = await pool.query(`
+    const totalsResult = await pool.query(`
       SELECT
-        COALESCE(SUM(amount), 0) AS total
-      FROM chanda
+        COALESCE(
+          (SELECT SUM(amount) FROM chanda),
+          0
+        ) AS total_chanda,
+
+        COALESCE(
+          (SELECT SUM(amount) FROM expenses),
+          0
+        ) AS total_expenses
     `);
 
-    /*
-       TOTAL EXPENSES
-    */
-
-    const totalExpensesResult = await pool.query(`
-      SELECT
-        COALESCE(SUM(amount), 0) AS total
-      FROM expenses
-    `);
-
-    /*
-       CHANDA BY CATEGORY
-    */
 
     const chandaCategoryResult = await pool.query(`
       SELECT
         category,
-        COALESCE(SUM(amount), 0) AS total,
-        COUNT(*) AS entries
+        COALESCE(SUM(amount), 0) AS total
       FROM chanda
       GROUP BY category
-      ORDER BY total DESC
+      ORDER BY category
     `);
 
-    /*
-       EXPENSES BY CATEGORY
-    */
 
     const expenseCategoryResult = await pool.query(`
       SELECT
         category,
-        COALESCE(SUM(amount), 0) AS total,
-        COUNT(*) AS entries
+        COALESCE(SUM(amount), 0) AS total
       FROM expenses
       GROUP BY category
-      ORDER BY total DESC
+      ORDER BY category
     `);
 
-    /*
-       MONTHLY CHANDA
-    */
 
-    const monthlyChandaResult = await pool.query(`
-      SELECT
-        TO_CHAR(date, 'YYYY-MM') AS month,
-        COALESCE(SUM(amount), 0) AS total
-      FROM chanda
-      GROUP BY TO_CHAR(date, 'YYYY-MM')
-      ORDER BY month DESC
-    `);
+    const totals =
+      totalsResult.rows[0];
 
-    /*
-       MONTHLY EXPENSES
-    */
-
-    const monthlyExpensesResult = await pool.query(`
-      SELECT
-        TO_CHAR(date, 'YYYY-MM') AS month,
-        COALESCE(SUM(amount), 0) AS total
-      FROM expenses
-      GROUP BY TO_CHAR(date, 'YYYY-MM')
-      ORDER BY month DESC
-    `);
 
     const totalChanda =
-      Number(totalChandaResult.rows[0].total);
+      Number(totals.total_chanda || 0);
+
 
     const totalExpenses =
-      Number(totalExpensesResult.rows[0].total);
+      Number(totals.total_expenses || 0);
+
 
     const balance =
       totalChanda - totalExpenses;
 
+
     res.json({
-      success: true,
-
       totalChanda,
-
       totalExpenses,
-
       balance,
 
       chandaByCategory:
-        chandaCategoryResult.rows,
+        chandaCategoryResult.rows.map(row => ({
+          category: row.category,
+          total: Number(row.total || 0)
+        })),
 
       expensesByCategory:
-        expenseCategoryResult.rows,
-
-      monthlyChanda:
-        monthlyChandaResult.rows,
-
-      monthlyExpenses:
-        monthlyExpensesResult.rows
+        expenseCategoryResult.rows.map(row => ({
+          category: row.category,
+          total: Number(row.total || 0)
+        }))
     });
 
   } catch (error) {
-    console.error("GET /api/dashboard error:", error);
+
+    console.error(
+      "DASHBOARD ERROR:",
+      error.message
+    );
 
     res.status(500).json({
       error: "Unable to load dashboard."
     });
+
   }
 });
 
-/* =========================================================
-   SIMPLE TOTALS API
-========================================================= */
-
-app.get("/api/totals", async (req, res) => {
-  try {
-    const result = await pool.query(`
-      SELECT
-        (SELECT COALESCE(SUM(amount), 0) FROM chanda)
-          AS total_chanda,
-
-        (SELECT COALESCE(SUM(amount), 0) FROM expenses)
-          AS total_expenses
-    `);
-
-    const totalChanda =
-      Number(result.rows[0].total_chanda);
-
-    const totalExpenses =
-      Number(result.rows[0].total_expenses);
-
-    res.json({
-      totalChanda,
-      totalExpenses,
-      balance: totalChanda - totalExpenses
-    });
-
-  } catch (error) {
-    console.error("GET /api/totals error:", error);
-
-    res.status(500).json({
-      error: "Unable to calculate totals."
-    });
-  }
-});
 
 /* =========================================================
-   CATEGORY LIST
+   404 API HANDLER
 ========================================================= */
 
-app.get("/api/categories", async (req, res) => {
-  try {
-    const chandaCategories = await pool.query(`
-      SELECT DISTINCT category
-      FROM chanda
-      WHERE category IS NOT NULL
-        AND category <> ''
-      ORDER BY category
-    `);
-
-    const expenseCategories = await pool.query(`
-      SELECT DISTINCT category
-      FROM expenses
-      WHERE category IS NOT NULL
-        AND category <> ''
-      ORDER BY category
-    `);
-
-    res.json({
-      chandaCategories:
-        chandaCategories.rows.map(row => row.category),
-
-      expenseCategories:
-        expenseCategories.rows.map(row => row.category)
-    });
-
-  } catch (error) {
-    console.error("GET /api/categories error:", error);
-
-    res.status(500).json({
-      error: "Unable to load categories."
-    });
-  }
-});
-
-/* =========================================================
-   FRONTEND FALLBACK
-========================================================= */
-
-/*
-   Express 5 does not support app.get("*").
-   This middleware handles normal browser requests
-   and sends the frontend index.html.
-*/
-
-app.use((req, res, next) => {
-  if (
-    req.method === "GET" &&
-    !req.path.startsWith("/api/")
-  ) {
-    return res.sendFile(
-      path.join(__dirname, "public", "index.html")
-    );
-  }
-
-  next();
-});
-
-/* =========================================================
-   404 HANDLER
-========================================================= */
-
-app.use((req, res) => {
+app.use("/api", (req, res) => {
   res.status(404).json({
-    error: "Route not found."
+    error: "API endpoint not found."
   });
 });
+
 
 /* =========================================================
    ERROR HANDLER
 ========================================================= */
 
-app.use((error, req, res, next) => {
-  console.error("Unhandled server error:", error);
+app.use((err, req, res, next) => {
+
+  console.error(
+    "SERVER ERROR:",
+    err
+  );
+
+  if (res.headersSent) {
+    return next(err);
+  }
 
   res.status(500).json({
     error: "Internal server error."
   });
+
 });
+
 
 /* =========================================================
    START SERVER
 ========================================================= */
 
 async function startServer() {
+
   await initializeDatabase();
 
-  app.listen(PORT, () => {
+  app.listen(PORT, "0.0.0.0", () => {
+
     console.log("");
     console.log("========================================");
     console.log("       LOCAL BOYS CHANDA");
     console.log("========================================");
     console.log(`Server running on port ${PORT}`);
-    console.log(`Local URL: http://localhost:${PORT}`);
+
+    if (PORT === 3000) {
+      console.log(
+        "Local URL: http://localhost:3000"
+      );
+    }
+
     console.log("========================================");
     console.log("");
+
   });
+
 }
+
 
 startServer();
